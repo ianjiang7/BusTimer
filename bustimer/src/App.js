@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 function App() {
   // State variables
-  const [inputTime, setInputTime] = useState("");
+  const [inputTime, setInputTime] = useState("6:00");
   const [targetTime, setTargetTime] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 
@@ -26,8 +26,8 @@ function App() {
   const fetchData = async (givenTime) => {
     try {
       const response = await fetch(
-        "https://bustime.mta.info/api/siri/stop-monitoring.json?key=d66294e3-5fe2-4bcb-91c8-a13515006ed5&OperatorRef=MTA&MonitoringRef=403913&LineRef=MTANYCT_M101"
-      );
+        "https://bustime.mta.info/api/siri/stop-monitoring.json?key=d66294e3-5fe2-4bcb-91c8-a13515006ed5&OperatorRef=MTA&MonitoringRef=403913&LineRef=MTA+NYCT_M101"
+       ,{mode:"no-cors"});
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -38,7 +38,7 @@ function App() {
       for (const visit of stopVisits) {
         timeList.push(visit.MonitoredVehicleJourney.MonitoredCall.ExpectedArrivalTime);
       }
-      console.log(timeList,givenTime);
+      console.log(timeList, givenTime);
       return getClosestTimeBefore(givenTime, timeList);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -48,7 +48,7 @@ function App() {
   // ChatGPT function to find the closest time before the given time
   function getClosestTimeBefore(givenTime, timeList) {
     const givenDate = new Date(`1970-01-01T${givenTime}:00`);
-  
+
     const validTimes = timeList
       .map(time => new Date(`1970-01-01T${time}:00`))
       .filter(time => time <= givenDate);
@@ -56,12 +56,12 @@ function App() {
     if (validTimes.length === 0) {
       return null;
     }
-  
+
     const closestTime = new Date(Math.max(...validTimes));
-  
+
     const hours = closestTime.getHours().toString().padStart(2, '0');
     const minutes = closestTime.getMinutes().toString().padStart(2, '0');
-  
+
     return `${hours}:${minutes}`;
   }
 
@@ -78,7 +78,7 @@ function App() {
       if (bustime) {
         const now = new Date();
         const [hours, minutes] = bustime.split(":").map(Number);
-        const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes-5);
+        const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes - 5);
 
         if (new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes) < now) {
           setTargetTime(target);
@@ -91,7 +91,7 @@ function App() {
       }
     }
   };
-/* ChatGPT generated*/
+  /* ChatGPT generated*/
   return (
     <div style={{ padding: "20px" }}>
       <h2>Select a Time</h2>
