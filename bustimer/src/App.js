@@ -45,7 +45,7 @@ function App() {
     }
   };
 
-  // Helper function to find the closest time before the given time
+  // ChatGPT function to find the closest time before the given time
   function getClosestTimeBefore(givenTime, timeList) {
     const givenDate = new Date(`1970-01-01T${givenTime}:00`);
   
@@ -78,9 +78,9 @@ function App() {
       if (bustime) {
         const now = new Date();
         const [hours, minutes] = bustime.split(":").map(Number);
-        const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes - 5);
+        const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes-5);
 
-        if (target > now) {
+        if (new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes) < now) {
           setTargetTime(target);
           setShowAlert(false); // Reset alert flag
         } else {
@@ -91,7 +91,7 @@ function App() {
       }
     }
   };
-
+/* ChatGPT generated*/
   return (
     <div style={{ padding: "20px" }}>
       <h2>Select a Time</h2>
